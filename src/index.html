@@ -1,12 +1,22 @@
 <!DOCTYPE html>
+<style>
+  h1 {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  </style>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>Server Panel</title>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
+    <h1>Server: 
+      <span id="toggle" style="color:red">Offline</span> 
+    </h1>
+    <button onclick="ToggleOnline()">Toggle Color</button>
     <p>Welcome to your Electron application.</p>
+    <script src="communicator.js"></script>
   </body>
 </html>
