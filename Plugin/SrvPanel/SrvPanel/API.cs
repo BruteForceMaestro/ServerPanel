@@ -1,35 +1,39 @@
-﻿using YamlDotNet.Serialization;
+﻿using Utf8Json;
 using System.Collections.Generic;
 using MEC;
 using Exiled.API.Features;
 using System.IO;
+using System;
 
 namespace SrvPanel
 {
     static class API
     {
-        public static IEnumerator<float> DataLoop()
+        static readonly string path = Path.Combine(Paths.Configs, "ServerPanelData.json");
+        static public SerializableData Data { get; set; } = new SerializableData();
+        static public IEnumerator<float> DataLoop()
         {
             while (true)
             {
                 yield return Timing.WaitForSeconds(5);
+                Log.Debug("wake up");
                 SerializeData();
             }
         }
-        public static void SerializeData()
+        static void SerializeData()
         {
-            List<SerializablePlayer> data = new List<SerializablePlayer>();
-            foreach (Player ply in Player.List)
+            try
             {
-                data.Add(
-                    new SerializablePlayer()
-                    {
-                        UserId = ply.UserId,
-                        Nickname = ply.Nickname,
-                    });
+                Log.Debug(JsonSerializer.ToJsonString(Data));
+                using (FileStream fs = File.Create(path))
+                {
+                    JsonSerializer.Serialize(fs, Data);
+                }
             }
-            var serializer = new SerializerBuilder().Build();
-            File.WriteAllText(Path.Combine(Paths.Configs, "ServerPanelData.yaml"), serializer.Serialize(data));
+            catch (Exception e)
+            {
+                Log.Debug(e);
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace SrvPanel
+﻿using System;
+
+namespace SrvPanel
 {
-    internal class SerializablePlayer
+    public class SerializablePlayer
     {
-        public string UserId { get; set; }
         public string Nickname { get; set; }
+        public DateTime JoinTime { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace SrvPanel
 {
-    internal class SerializableData
+    public class SerializableData
     {
-        public List<SerializablePlayer> _players { get; set; }
+        public Dictionary<string, SerializablePlayer> Ply { get; set; }
     }
 }

@@ -1,8 +1,9 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const yaml = require('js-yaml');
-const fs   = require('fs');
-const configPath = path.join(app.getPath('appData'), 'EXILED', 'Configs', 'ServerPanelData.yaml');
+
+ipcMain.on('getPath', (event) => {
+  event.returnValue = app.getPath("appData");
+})
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -15,15 +16,18 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  Listener();
-
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.send('startListener');
 };
 
 // This method will be called when Electron has finished
@@ -50,20 +54,3 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function Listener(){
-  while (true){
-      await timeout(3000);
-      try {
-        let doc = yaml.load(fs.readFileSync(configPath, 'utf8'));
-        console.log(doc[0].Nickname);
-      } catch (e) {
-        console.log(e);
-      }
-  }
-}
