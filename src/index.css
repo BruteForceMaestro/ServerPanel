@@ -8,8 +8,28 @@
   border-radius: 10px;
   border-style: solid;
   border-width: 2px;
+  border-color: grey;
   padding: 1%;
   margin: 5%;
+}
+.preview{
+  background-color: lightgrey;
+}
+.regular{
+  background-color: white;
+}
+.selected{
+  background-color: lightsteelblue;
+}
+.anim{
+  animation-name: embiggen;
+  animation-duration: 200ms;
+  transform: scale(120%);
+}
+.animrev{
+  animation-name: smallen;
+  animation-duration: 200ms;
+  transform: scale(100%);
 }
 #title{
   font-size: x-large;
@@ -30,4 +50,21 @@
 @font-face {
   font-family: thinFont;
   src: url(fonts/Poppins-Light.ttf);
+}
+@keyframes embiggen{
+  0% {
+    transform: scale(100%);
+  }
+  100% {
+    transform: scale(120%);
+  }
+}
+@keyframes smallen{
+  0% {
+    transform: scale(120%);
+  }
+  100% {
+    transform: scale(100%);
+
+  }
 }

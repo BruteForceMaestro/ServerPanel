@@ -1,7 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-ipcMain.on('getPath', (event) => {
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+var mainWindow;
+
+ipcMain.once('getPath', (event: any) => {
   event.returnValue = app.getPath("appData");
 })
 
@@ -13,16 +17,18 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      preload: path.join(__dirname, "preload.js") // use a preload script
     }
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile('../index.html');
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
